@@ -23,6 +23,11 @@ const NETWORK_PROFILES = {
         downloadThroughput: (10 * 1024 * 1024) / 8, // 10 Mbps in bytes/sec
         uploadThroughput: (5 * 1024 * 1024) / 8,    // 5 Mbps in bytes/sec
     },
+    unmetered: {
+        latency: 1,
+        downloadThroughput: (100 * 1024 * 1024) / 8, // 100 Mbps in bytes/sec
+        uploadThroughput: (100 * 1024 * 1024) / 8,   // 100 Mbps in bytes/sec
+    },
 };
 
 // Performance metrics interface
@@ -63,7 +68,7 @@ function parseArguments(): CLIArgs {
         boolean: ['headful', 'fresh'],
         default: {
             runs: 5,
-            profile: 'wifi',
+            profile: 'unmetered',
             headful: false,
             fresh: false,
         },
@@ -75,7 +80,7 @@ function parseArguments(): CLIArgs {
         console.log('\nOptions:');
         console.log('  --url        Target website to test (required)');
         console.log('  --runs       Number of test iterations (default: 5)');
-        console.log('  --profile    Network profile: slow3g, fast3g, wifi (default: wifi)');
+        console.log('  --profile    Network profile: slow3g, fast3g, wifi, unmetered (default: unmetered)');
         console.log('  --output     Custom CSV filename');
         console.log('  --headful    Run in non-headless mode');
         console.log('  --fresh      Clear cache/cookies between runs for fresh visits');
@@ -83,7 +88,7 @@ function parseArguments(): CLIArgs {
     }
 
     if (!NETWORK_PROFILES[args.profile as keyof typeof NETWORK_PROFILES]) {
-        console.error(`❌ Error: Invalid profile "${args.profile}". Use: slow3g, fast3g, or wifi`);
+        console.error(`❌ Error: Invalid profile "${args.profile}". Use: slow3g, fast3g, wifi, or unmetered`);
         process.exit(1);
     }
 
