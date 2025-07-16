@@ -1,0 +1,44 @@
+{
+    "name": "frontend-benchmark",
+    "version": "1.0.0",
+    "description": "CLI app for Cloudflare caching performance testing",
+    "main": "test.ts",
+    "scripts": {
+        "test": "tsx test.ts",
+        "start": "tsx test.ts",
+        "visualize": "tsx visualize.ts",
+        "bun:test": "bun run test.ts",
+        "bun:start": "bun run test.ts",
+        "bun:visualize": "bun run visualize.ts"
+    },
+    "dependencies": {
+        "canvas": "^3.1.2",
+        "chart.js": "^4.5.0",
+        "chartjs-adapter-date-fns": "^3.0.0",
+        "csv-writer": "^1.6.0",
+        "date-fns": "^4.1.0",
+        "minimist": "^1.2.8",
+        "puppeteer": "^24.13.0",
+        "tsx": "^4.19.2"
+    },
+    "devDependencies": {
+        "@types/minimist": "^1.2.5",
+        "@types/node": "^20.0.0",
+        "bun-types": "latest"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "keywords": [
+        "performance",
+        "cloudflare",
+        "caching",
+        "benchmark",
+        "cli",
+        "npm",
+        "pnpm",
+        "bun"
+    ],
+    "author": "",
+    "license": "MIT"
+}
