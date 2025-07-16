@@ -151,38 +151,7 @@ async function ensureResultsDirectory(): Promise<void> {
     }
 }
 
-// Collect performance metrics from browser
-async function collectMetrics(page: any, url: string): Promise<Partial<PerformanceMetrics>> {
-    // Get performance timing data
-    const performanceData = await page.evaluate(() => {
-        const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-        return {
-            dnsLookupTime: navigation.domainLookupEnd - navigation.domainLookupStart,
-            tcpConnectionTime: navigation.connectEnd - navigation.connectStart,
-            tlsHandshakeTime: navigation.secureConnectionStart > 0
-                ? navigation.connectEnd - navigation.secureConnectionStart
-                : 0,
-            ttfb: navigation.responseStart - navigation.requestStart,
-            domContentLoadedTime: navigation.domContentLoadedEventEnd - navigation.fetchStart,
-            fullPageLoadTime: navigation.loadEventEnd - navigation.fetchStart,
-        };
-    });
 
-    // Get response from the main request
-    const response = await page.goto(url, { waitUntil: 'load' });
-    const headers = response.headers();
-
-    return {
-        timestamp: new Date().toISOString(),
-        siteName: getHostname(url),
-        httpStatus: response.status(),
-        ...performanceData,
-        cfCacheStatus: headers['cf-cache-status'] || 'N/A',
-        cacheControl: headers['cache-control'] || 'N/A',
-        age: headers['age'] || 'N/A',
-        contentLength: headers['content-length'] || 'N/A',
-    };
-}
 
 // Run a single performance test
 async function runSingleTest(
