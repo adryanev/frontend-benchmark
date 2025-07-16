@@ -24,17 +24,40 @@ function parseCSV(content: string): any[] {
     const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
     const data: any[] = [];
 
+    // Create a mapping from CSV headers to expected field names
+    const headerMapping: { [key: string]: string } = {
+        'Timestamp': 'timestamp',
+        'Site Name': 'siteName',
+        'Resource URL': 'resourceUrl',
+        'Resource Type': 'resourceType',
+        'HTTP Status': 'httpStatus',
+        'DNS Lookup (ms)': 'dnsLookupTime',
+        'TCP Connection (ms)': 'tcpConnectionTime',
+        'TLS Handshake (ms)': 'tlsHandshakeTime',
+        'TTFB (ms)': 'ttfb',
+        'DOM Content Loaded (ms)': 'domContentLoadedTime',
+        'Full Page Load (ms)': 'fullPageLoadTime',
+        'CF Cache Status': 'cfCacheStatus',
+        'X-Worker-Cache': 'xWorkerCache',
+        'Cache Control': 'cacheControl',
+        'Age': 'age',
+        'Content Length': 'contentLength'
+    };
+
     for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
         const row: any = {};
+
         headers.forEach((header, index) => {
+            const mappedHeader = headerMapping[header] || header;
             const value = values[index];
+
             // Convert numeric fields
             if (['httpStatus', 'dnsLookupTime', 'tcpConnectionTime', 'tlsHandshakeTime',
-                'ttfb', 'domContentLoadedTime', 'fullPageLoadTime'].includes(header)) {
-                row[header] = parseInt(value) || 0;
+                'ttfb', 'domContentLoadedTime', 'fullPageLoadTime'].includes(mappedHeader)) {
+                row[mappedHeader] = parseInt(value) || 0;
             } else {
-                row[header] = value;
+                row[mappedHeader] = value;
             }
         });
         data.push(row);
